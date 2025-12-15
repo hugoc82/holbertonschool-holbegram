@@ -17,6 +17,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+
     return MaterialApp(
       title: 'Holbegram',
       debugShowCheckedModeBanner: false,
@@ -24,9 +27,15 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      home: LoginScreen(
+        emailController: emailController,
+        passwordController: passwordController,
+      ),
       routes: {
-        '/login': (_) => const LoginScreen(),
+        '/login': (_) => LoginScreen(
+          emailController: TextEditingController(),
+          passwordController: TextEditingController(),
+        ),
         '/signup': (_) => const SignupScreen(),
         '/upload': (_) => const UploadImageScreen(),
       },
