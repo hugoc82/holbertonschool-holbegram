@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+
+import '../methods/auth_methods.dart';
 import '../widgets/text_field.dart';
+import 'signup_screen.dart';
+import 'upload_image_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
+  final bool passwordVisibleDefault;
 
   LoginScreen({
     super.key,
     required this.emailController,
     required this.passwordController,
+    this.passwordVisibleDefault = true,
   });
 
   @override
@@ -16,12 +22,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _passwordVisible = true;
+  late bool _passwordVisible;
 
   @override
   void initState() {
     super.initState();
-    _passwordVisible = true;
+    _passwordVisible = widget.passwordVisibleDefault;
   }
 
   @override
@@ -29,6 +35,42 @@ class _LoginScreenState extends State<LoginScreen> {
     widget.emailController.dispose();
     widget.passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _onLogin() async {
+    final res = await AuthMethode().login(
+      email: widget.emailController.text.trim(),
+      password: widget.passwordController.text,
+    );
+
+    if (!mounted) return;
+
+    if (res == "success") {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Login")));
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const UploadImageScreen()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res)));
+    }
+  }
+
+  void _goToSignup() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SignupScreen(
+          emailController: TextEditingController(),
+          usernameController: TextEditingController(),
+          passwordController: TextEditingController(),
+          passwordConfirmController: TextEditingController(),
+        ),
+      ),
+    );
   }
 
   @override
@@ -87,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           const Color.fromARGB(218, 226, 37, 24),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: _onLogin,
                       child: const Text(
                         'Log in',
                         style: TextStyle(color: Colors.white),
@@ -115,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         const Text("Don't have an account"),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: _goToSignup,
                           child: const Text(
                             'Sign up',
                             style: TextStyle(

@@ -36,7 +36,12 @@ class MyApp extends StatelessWidget {
           emailController: TextEditingController(),
           passwordController: TextEditingController(),
         ),
-        '/signup': (_) => const SignupScreen(),
+        '/signup': (_) => SignupScreen(
+          emailController: TextEditingController(),
+          usernameController: TextEditingController(),
+          passwordController: TextEditingController(),
+          passwordConfirmController: TextEditingController(),
+        ),
         '/upload': (_) => const UploadImageScreen(),
       },
     );
