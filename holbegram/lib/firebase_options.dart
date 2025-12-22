@@ -40,15 +40,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBRDVyejuSdrllfNK5hEsx3NJJwK13ztok',
-    appId: '1:761834798890:web:0fb6b55c4e3ec8ca492853',
-    messagingSenderId: '761834798890',
-    projectId: 'holbegram-58c0f',
-    authDomain: 'holbegram-58c0f.firebaseapp.com',
-    storageBucket: 'holbegram-58c0f.firebasestorage.app',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyC06j-4cAWWYy-ZOxRnRnWhbovTWCvQ4Wg',
     appId: '1:761834798890:android:8a1ba4ec1da9b3ed492853',
@@ -64,6 +55,15 @@ class DefaultFirebaseOptions {
     projectId: 'holbegram-58c0f',
     storageBucket: 'holbegram-58c0f.firebasestorage.app',
     iosBundleId: 'com.example.holbegram',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBRDVyejuSdrllfNK5hEsx3NJJwK13ztok',
+    appId: '1:761834798890:web:0fb6b55c4e3ec8ca492853',
+    messagingSenderId: '761834798890',
+    projectId: 'holbegram-58c0f',
+    authDomain: 'holbegram-58c0f.firebaseapp.com',
+    storageBucket: 'holbegram-58c0f.firebasestorage.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'holbegram-58c0f.firebaseapp.com',
     storageBucket: 'holbegram-58c0f.firebasestorage.app',
   );
+
 }

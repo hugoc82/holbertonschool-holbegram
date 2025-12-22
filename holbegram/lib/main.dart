@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
-import 'screens/login_screen.dart';
-import 'screens/signup_screen.dart';
-import 'screens/upload_image_screen.dart';
+import 'providers/user_provider.dart';
+import 'screens/auth/login_screen.dart';
+import 'screens/home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // ✅ IMPORTANT: sur Web (et recommandé partout), il faut passer les options
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const MyApp());
 }
 
@@ -17,33 +22,45 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
+    return ChangeNotifierProvider(
+      create: (_) => UserProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Holbegram',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
 
-    return MaterialApp(
-      title: 'Holbegram',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: LoginScreen(
-        emailController: emailController,
-        passwordController: passwordController,
-      ),
-      routes: {
-        '/login': (_) => LoginScreen(
-          emailController: TextEditingController(),
-          passwordController: TextEditingController(),
+            if (snapshot.hasData) {
+              return FutureBuilder(
+                future: Provider.of<UserProvider>(
+                  context,
+                  listen: false,
+                ).refreshUser(),
+                builder: (context, userSnapshot) {
+                  if (userSnapshot.connectionState == ConnectionState.waiting) {
+                    return const Scaffold(
+                      body: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  return const Home();
+                },
+              );
+            }
+
+            return const LoginScreen();
+          },
         ),
-        '/signup': (_) => SignupScreen(
-          emailController: TextEditingController(),
-          usernameController: TextEditingController(),
-          passwordController: TextEditingController(),
-          passwordConfirmController: TextEditingController(),
-        ),
-        '/upload': (_) => const UploadImageScreen(),
-      },
+      ),
     );
   }
 }

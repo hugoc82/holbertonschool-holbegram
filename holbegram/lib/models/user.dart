@@ -12,7 +12,7 @@ class Users {
   final List<dynamic> saved;
   final String searchKey;
 
-  const Users({
+  Users({
     required this.uid,
     required this.email,
     required this.username,
@@ -25,23 +25,24 @@ class Users {
     required this.searchKey,
   });
 
+  // Méthode pour créer un objet Users à partir d'un DocumentSnapshot
   static Users fromSnap(DocumentSnapshot snap) {
-    final snapshot = snap.data() as Map<String, dynamic>;
-
+    var snapshot = snap.data() as Map<String, dynamic>;
     return Users(
-      uid: (snapshot['uid'] ?? snap.id) as String,
-      email: (snapshot['email'] ?? '') as String,
-      username: (snapshot['username'] ?? '') as String,
-      bio: (snapshot['bio'] ?? '') as String,
-      photoUrl: (snapshot['photoUrl'] ?? '') as String,
-      followers: List<dynamic>.from(snapshot['followers'] ?? []),
-      following: List<dynamic>.from(snapshot['following'] ?? []),
-      posts: List<dynamic>.from(snapshot['posts'] ?? []),
-      saved: List<dynamic>.from(snapshot['saved'] ?? []),
-      searchKey: (snapshot['searchKey'] ?? '') as String,
+      uid: snapshot['uid'],
+      email: snapshot['email'],
+      username: snapshot['username'],
+      bio: snapshot['bio'],
+      photoUrl: snapshot['photoUrl'],
+      followers: snapshot['followers'],
+      following: snapshot['following'],
+      posts: snapshot['posts'],
+      saved: snapshot['saved'],
+      searchKey: snapshot['searchKey'],
     );
   }
 
+  // Méthode pour convertir l'objet Users en Map pour Firestore
   Map<String, dynamic> toJson() => {
     'uid': uid,
     'email': email,
